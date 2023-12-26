@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Chat</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Incluir Bootstrap JS desde CDN -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<style>
+</style>
+<body>
+    <div class="container">
+        <br>
+        <div class="jumbotron">
+            <h1 class="display-4">Enviar mensaje</h1>
+            <br>
+            <input id="nombre" class="form-control" placeholder="Nombre">
+            <br>
+            <textarea id="mensaje" class="form-control" placeholder="Su mensaje aquí"></textarea>
+            <br>
+            <button id="enviar" class="btn btn-success">Enviar</button>
+        </div>
+        <div id="mensajes"></div>
+    </div>
+    <script>
+        $(() => {
+            $("#enviar").click(() => {
+                console.log("PASA POR ACA")
+                sendMessages({
+                    name: $("#nombre").val(),
+                    description: $("#mensaje").val()
+                });
+            });
+            getMessages();
+        });
+
+        function addMessages(message) {
+            console.log("PASA POR ACA addMessages", message)
+            $("#mensajes").append(`
+                <h4>${message.name}</h4>
+                <p>${message.description}</p>
+            `);
+        }
+
+        function getMessages() {
+            $.get('http://localhost:3000/messages', (data) => {
+                data.forEach(addMessages);
+            });
+        }
+
+        function sendMessages(mensaje) {
+            $.post('http://localhost:3000/messages', mensaje);
+        }
+    </script>
+</body>
+</html>
